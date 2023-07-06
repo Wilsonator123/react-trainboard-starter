@@ -11,23 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-.stations-form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.stations-form div{
-    margin-bottom: 10px;
-}
-
-.stations-form button{
-    margin-top: 10px;
-    background-color: palevioletred;
-    border: none;
-    border-radius: 15%;
-    font-size: 50px;
-    padding:10px;
-}

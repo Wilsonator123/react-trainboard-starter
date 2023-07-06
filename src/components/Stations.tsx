@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
+import classNames from 'classnames';
 import '../Stations.css';
 import { fetchStations, getJourneyInfo } from '../helpers/ApiCallHelper';
-import { dateToString } from '../helpers/dateHelper';
+import { dateToString, minutesToHoursAndMinutes } from '../helpers/dateAndTimeFormatter';
 import { apiError, JourneyType, OptionsType, StationType } from '../types/stationType';
 
 const Stations: React.FC = () => {
@@ -15,6 +16,7 @@ const Stations: React.FC = () => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        setLoading(false);
         //window.location.href = `https://www.lner.co.uk/travel-information/travelling-now/live-train-times/depart/${selectedStations.fromStation}/${selectedStations.toStation}/#LiveDepResults`;
         await getJourneyInfo(fromStation, toStation)
             .then((value) => {
@@ -52,29 +54,30 @@ const Stations: React.FC = () => {
             <h1 id = "Welcome">Stations!</h1>
             <div>
                 <form onSubmit = { handleSubmit } className = "stations-form">
-                    <div>
-                        <label htmlFor = "fromStation">From:</label>
-                        <Select
-                            onChange = { (options: OptionsType | null) => {
-                                if(options) {
-                                    setFromStation(options.value);
-                                }} }
-                            options = { options }
-                        />
+                    <div className = { 'selectStationOptions' }>
+                        <div className = { 'fromStationChoice' }>
+                            <Select
+                                onChange = { (options: OptionsType | null) => {
+                                    if(options) {
+                                        setFromStation(options.value);
+                                    }} }
+                                options = { options }
+                                placeholder =  'Select From Station'
+                            />
+                        </div>
+                        <div className = { 'toStationChoice' }>
+                            <Select
+                                onChange = { (options: OptionsType | null) => {
+                                    if(options) {
+                                        setToStation(options.value);
+                                    }
+                                } }
+                                options = { options }
+                                placeholder =  'Select To Station'
+                            />
+                        </div>
                     </div>
-                    <div>
-                        <label htmlFor = "toStation">To:</label>
-                        <Select
-                            onChange = { (options: OptionsType | null) => {
-                                if(options) {
-                                    setToStation(options.value);
-                                }
-                            } }
-                            options = { options }
-                        />
-                    </div>
-
-                    <button type = "submit">Submit</button>
+                    <button className = { 'cool-button' } type = "submit">Submit</button>
                 </form>
             </div>
             <div className = { 'journeyContainer' }>
@@ -85,12 +88,17 @@ const Stations: React.FC = () => {
                             <div className = { 'departureTime' }>{dateToString(new Date(journey.departureTime))}</div>
                             <div>➔</div>
                             <div className = { 'arrivalTime' }>{dateToString(new Date(journey.arrivalTime))}</div>
+                            <div className = { 'platformInfo' }>Platform 9¾, {
+                                journey.legs.length-1>0? `Changes: ${journey.legs.length-1}` : 'Direct'
+                            }</div>
                             <div className = 'sideInfo'>
-                                <div>{journey.journeyDurationInMinutes}</div>
-                                <div>{journey.legs.length - 1}</div>
+                                <div>{minutesToHoursAndMinutes(journey.journeyDurationInMinutes)}</div>
                             </div>
                             <div className = { 'destinationInfo' }>
                                 <div>From {journey.originStation.displayName} to {journey.destinationStation.displayName}</div>
+                            </div>
+                            <div className = { 'trainImage' }>
+                                <img src = { 'https://media.forbiddenplanet.com/products/73/47/4e4aac4bb781cb39b345b6e371a2f9ac6992.png' } width = { 100 } height = { 100 }/>
                             </div>
                         </div>
                         <div className = { 'journeyFooter' }>{journey.primaryTrainOperator.name}</div>
