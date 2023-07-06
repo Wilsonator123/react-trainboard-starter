@@ -1,0 +1,50 @@
+.journeyContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    margin: 30px auto;
+    border: 1px solid red;
+}
+
+.journeyDisplay{
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 70%;
+    margin: 10px auto;
+}
+
+.journeyMain{
+    display: grid;
+    padding: 10px;
+    grid-template-columns: 0.5fr 0.3fr 0.5fr 2fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.departureTime{
+    grid-column: 1/2;
+    grid-row: 1/2;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.arrivalTime{
+    grid-column: 3/4;
+
+    font-size: 20px;
+    font-weight: 600;
+}
+
+
+
+.journeyFooter{
+    background-color: lightgray;
+    border-radius: 0 5px 0 5px;
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: start;
+    padding: 15px;
+}
+

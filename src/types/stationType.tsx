@@ -12,8 +12,14 @@ export type OperatorType = {
 
 //Make type for outbound journeys
 export type JourneyType = {
-    originStation: StationType;
-    destinationStation: StationType;
+    originStation: {
+        displayName: string;
+        crs: string;
+    };
+    destinationStation: {
+        displayName: string;
+        crs: string;
+    };
     departureTime: string;
     arrivalTime: string;
     legs: Array<Leg>;
@@ -29,7 +35,10 @@ export type Leg = {
     legId: string;
     trainOperator: OperatorType;
     destination: StationType;
-    origin: StationType;
+    origin: {
+        displayName: string;
+        crs: string;
+    };
 }
 
 export type apiError = {

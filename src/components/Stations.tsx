@@ -77,16 +77,25 @@ const Stations: React.FC = () => {
                     <button type = "submit">Submit</button>
                 </form>
             </div>
-            <div>
+            <div className = { 'journeyContainer' }>
+
                 {loading && journeyInfo.map((journey: JourneyType) => (
-                    <div key = { journey.originStation.crs } >
-                        <div className={ 'departureTime' }>{dateToString(new Date(journey.departureTime))}</div>
-                        <div className={ 'arrivalTime' }>{dateToString(new Date(journey.arrivalTime))}</div>
-                        <div>{journey.journeyDurationInMinutes}</div>
-                        <div>{journey.legs.length - 1}</div>
-                        <div>{journey.primaryTrainOperator.name}</div>
-                        <div>From {journey.originStation.name} to {journey.destinationStation.name}</div>
-                    </div> ),
+                    <div key = { journey.originStation.crs } className = { 'journeyDisplay' }>
+                        <div className = { 'journeyMain' }>
+                            <div className = { 'departureTime' }>{dateToString(new Date(journey.departureTime))}</div>
+                            <div>➔</div>
+                            <div className = { 'arrivalTime' }>{dateToString(new Date(journey.arrivalTime))}</div>
+                            <div className = 'sideInfo'>
+                                <div>{journey.journeyDurationInMinutes}</div>
+                                <div>{journey.legs.length - 1}</div>
+                            </div>
+                            <div className = { 'destinationInfo' }>
+                                <div>From {journey.originStation.displayName} to {journey.destinationStation.displayName}</div>
+                            </div>
+                        </div>
+                        <div className = { 'journeyFooter' }>{journey.primaryTrainOperator.name}</div>
+
+                    </div>),
                 )}
 
             </div>
