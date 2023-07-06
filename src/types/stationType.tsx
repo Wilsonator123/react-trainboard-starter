@@ -1,7 +1,7 @@
 
 export type StationType = {
-    stationName: string;
-    crsCode: string;
+    name: string;
+    crs: string;
 }
 
 //Train operator type

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
+import '../Stations.css';
 import { fetchStations, getJourneyInfo } from '../helpers/ApiCallHelper';
+import { dateToString } from '../helpers/dateHelper';
 import { apiError, JourneyType, OptionsType, StationType } from '../types/stationType';
 
 const Stations: React.FC = () => {
@@ -29,42 +31,20 @@ const Stations: React.FC = () => {
 
     const options: OptionsType[] = [];
     allStations.map(station => (
-        options.push({ value: station.crsCode, label: station.stationName })
+        options.push({ value: station.crs, label: station.name })
     ));
 
     useEffect(() => {
         setLoading(false);
+        setAllStations([]);
         fetchStations()
-            .then((value) => console.log(value))
+            .then((value) => {
+                value.stations.map((stations: StationType ) => {
+                    setAllStations((prev) => [...prev, stations]);
+                });
+            })
             .catch((err) => console.log(err))
             .finally(() => console.log('finally'));
-        setAllStations([
-            {
-                stationName: 'Northolt Park',
-                crsCode: 'NLT',
-            },
-            {
-                stationName: 'West Ruislip',
-                crsCode: 'WRU',
-            },
-            {
-                stationName: 'Wembley Central',
-                crsCode: 'WCX',
-            },
-            {
-                stationName: 'Marylebone',
-                crsCode: 'MYB',
-            },
-            {
-                stationName: 'High Wycombe',
-                crsCode: 'HWY',
-            },
-            {
-                stationName: 'Gerrards Cross',
-                crsCode: 'GER',
-
-            },
-        ]);
     }, []);
 
     return (
@@ -114,8 +94,8 @@ const Stations: React.FC = () => {
                         {loading && journeyInfo.map((journey) => (
                             <tr key = { journey.departureTime }>
                                 <td> 7 </td>
-                                <td>{new Date(journey.departureTime).toLocaleTimeString()}</td>
-                                <td>{new Date(journey.arrivalTime).toLocaleTimeString()}</td>
+                                <td>{dateToString(new Date(journey.departureTime))}</td>
+                                <td>{dateToString(new Date(journey.arrivalTime))}</td>
                                 <td>{journey.journeyDurationInMinutes}</td>
                                 <td>{journey.legs.length - 1}</td>
                                 <td>{journey.primaryTrainOperator.name}</td>

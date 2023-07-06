@@ -14,7 +14,8 @@ export const getJourneyInfo = (originStation: string, destinationStation: string
         numberOfAdults: '2',
         numberOfChildren: '0',
         journeyType: 'single',
-        outboundDateTime: '2023-07-06',
+        outboundDateTime: '2023-08-01T12:00:00',
+
         outboundIsArriveBy: 'false',
     }), {
         headers: {
