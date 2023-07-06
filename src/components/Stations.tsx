@@ -15,11 +15,10 @@ const Stations: React.FC = () => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        console.log(toStation);
         //window.location.href = `https://www.lner.co.uk/travel-information/travelling-now/live-train-times/depart/${selectedStations.fromStation}/${selectedStations.toStation}/#LiveDepResults`;
         await getJourneyInfo(fromStation, toStation)
             .then((value) => {
-                console.log(value);
+                console.log('here '+value.outboundJourneys[0].originStation.displayName);
                 setJourneyInfo(value.outboundJourneys);
             })
             .catch((err) => {
@@ -79,31 +78,17 @@ const Stations: React.FC = () => {
                 </form>
             </div>
             <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Departure Platform</th>
-                            <th>Departure Time</th>
-                            <th>Arrival Time</th>
-                            <th>Duration</th>
-                            <th>Changes</th>
-                            <th>Operator</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading && journeyInfo.map((journey) => (
-                            <tr key = { journey.departureTime }>
-                                <td> 7 </td>
-                                <td>{dateToString(new Date(journey.departureTime))}</td>
-                                <td>{dateToString(new Date(journey.arrivalTime))}</td>
-                                <td>{journey.journeyDurationInMinutes}</td>
-                                <td>{journey.legs.length - 1}</td>
-                                <td>{journey.primaryTrainOperator.name}</td>
+                {loading && journeyInfo.map((journey: JourneyType) => (
+                    <div key = { journey.originStation.crs } >
+                        <div className={ 'departureTime' }>{dateToString(new Date(journey.departureTime))}</div>
+                        <div className={ 'arrivalTime' }>{dateToString(new Date(journey.arrivalTime))}</div>
+                        <div>{journey.journeyDurationInMinutes}</div>
+                        <div>{journey.legs.length - 1}</div>
+                        <div>{journey.primaryTrainOperator.name}</div>
+                        <div>From {journey.originStation.name} to {journey.destinationStation.name}</div>
+                    </div> ),
+                )}
 
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
             </div>
         </div>
     );
