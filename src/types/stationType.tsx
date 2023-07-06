@@ -4,13 +4,11 @@ export type StationType = {
     crs: string;
 }
 
-//Train operator type
 export type OperatorType = {
     name: string;
     code: string;
 }
 
-//Make type for outbound journeys
 export type JourneyType = {
     originStation: StationType;
     destinationStation: StationType;
@@ -32,12 +30,12 @@ export type Leg = {
     origin: StationType;
 }
 
-export type apiError = {
+export type ApiError = {
     error: string;
     error_description: string;
 }
 
-export type OptionsType = {
+export type SelectStationOptionsType = {
     value: string;
     label: string;
 }

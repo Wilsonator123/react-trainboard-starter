@@ -3,7 +3,8 @@ import Select from 'react-select';
 import '../Stations.css';
 import { fetchStations, getJourneyInfo } from '../helpers/ApiCallHelper';
 import { dateToString } from '../helpers/dateHelper';
-import { apiError, JourneyType, OptionsType, StationType } from '../types/stationType';
+import { ApiError, JourneyType, SelectStationOptionsType, StationType } from '../types/stationType';
+import { OutboundTrainsView } from './outboundTrainsView';
 
 const Stations: React.FC = () => {
     const [allStations, setAllStations] = useState<StationType[]>([]);
@@ -11,12 +12,10 @@ const Stations: React.FC = () => {
     const [toStation, setToStation] = useState<string>('');
     const [journeyInfo, setJourneyInfo] = useState<JourneyType[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<apiError>();
+    const [error, setError] = useState<ApiError>();
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        console.log(toStation);
-        //window.location.href = `https://www.lner.co.uk/travel-information/travelling-now/live-train-times/depart/${selectedStations.fromStation}/${selectedStations.toStation}/#LiveDepResults`;
         await getJourneyInfo(fromStation, toStation)
             .then((value) => {
                 console.log(value);
@@ -29,7 +28,7 @@ const Stations: React.FC = () => {
             .finally(() => setLoading(true));
     };
 
-    const options: OptionsType[] = [];
+    const options: SelectStationOptionsType[] = [];
     allStations.map(station => (
         options.push({ value: station.crs, label: station.name })
     ));
@@ -56,7 +55,7 @@ const Stations: React.FC = () => {
                     <div>
                         <label htmlFor = "fromStation">From:</label>
                         <Select
-                            onChange = { (options: OptionsType | null) => {
+                            onChange = { (options: SelectStationOptionsType | null) => {
                                 if(options) {
                                     setFromStation(options.value);
                                 }} }
@@ -66,7 +65,7 @@ const Stations: React.FC = () => {
                     <div>
                         <label htmlFor = "toStation">To:</label>
                         <Select
-                            onChange = { (options: OptionsType | null) => {
+                            onChange = { (options: SelectStationOptionsType | null) => {
                                 if(options) {
                                     setToStation(options.value);
                                 }
@@ -79,31 +78,7 @@ const Stations: React.FC = () => {
                 </form>
             </div>
             <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Departure Platform</th>
-                            <th>Departure Time</th>
-                            <th>Arrival Time</th>
-                            <th>Duration</th>
-                            <th>Changes</th>
-                            <th>Operator</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading && journeyInfo.map((journey) => (
-                            <tr key = { journey.departureTime }>
-                                <td> 7 </td>
-                                <td>{dateToString(new Date(journey.departureTime))}</td>
-                                <td>{dateToString(new Date(journey.arrivalTime))}</td>
-                                <td>{journey.journeyDurationInMinutes}</td>
-                                <td>{journey.legs.length - 1}</td>
-                                <td>{journey.primaryTrainOperator.name}</td>
-
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                {loading ? <OutboundTrainsView  journeyInfo = { journeyInfo }/> : null}
             </div>
         </div>
     );
