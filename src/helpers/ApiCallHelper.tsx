@@ -1,3 +1,5 @@
+import { GeoLocationPosition } from '../types/stationType';
+
 export const fetchStations = () => {
     return fetch('https://mobile-api-softwire2.lner.co.uk/v1/stations', {
         headers: {
@@ -27,6 +29,10 @@ export const getJourneyInfo = (originStation: string, destinationStation: string
     }).catch((error) => {
         console.log('');
     });
-
 };
 
+export const getCurrentPosition = () => {
+    return new Promise<GeoLocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+};
